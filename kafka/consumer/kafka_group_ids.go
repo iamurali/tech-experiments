@@ -1,0 +1,4 @@
+package main
+
+const KAFKA_GROUP_IDS = "127.0.0.1:9092,127.0.0.1:9093,127.0.0.1:9094"
+const KAFKA_SINGLE_NODE = "127.0.0.1:9092"
