@@ -667,29 +667,15 @@ curl -X PUT "localhost:9200/_cluster/settings" \
 - [Elasticsearch Query DSL](https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl.html)
 
 ### 🛠️ Tools & Utilities
-- [Elasticsearch Head](https://github.com/mobz/elasticsearch-head) - Web interface
+- [Elasticsearch Head](https://github.com/mobz/elasticsearch-head) - Web interface [TODO]
 - [Kibana Dev Tools](http://localhost:5601/app/dev_tools#/console) - Query console
 - [Elasticsearch Curator](https://github.com/elastic/curator) - Index management
 
-### 🎓 Learning Resources
-- [Elasticsearch: The Definitive Guide](https://www.elastic.co/guide/en/elasticsearch/guide/current/index.html)
-- [Elasticsearch in Action](https://www.manning.com/books/elasticsearch-in-action)
-- [Elasticsearch: The Complete Guide](https://www.udemy.com/course/elasticsearch-complete-guide/)
 
 ### 🔄 HA Testing Resources
 - [Elasticsearch High Availability](https://www.elastic.co/guide/en/elasticsearch/reference/current/high-availability.html)
 - [Cluster Health API](https://www.elastic.co/guide/en/elasticsearch/reference/current/cluster-health.html)
 - [Shard Allocation](https://www.elastic.co/guide/en/elasticsearch/reference/current/shards-allocation.html)
-
----
-
-## 🤝 Contributing
-
-1. 🧪 Test your changes locally using Docker Compose
-2. 📝 Update this README for any new features
-3. 🔍 Ensure all commands work as documented
-4. 📊 Add examples for new functionality
-5. 🧪 Test HA scenarios with the testing script
 
 ---
 
@@ -701,7 +687,7 @@ This POC is for **educational and development purposes**.
 
 <div align="center">
 
-**Made with ❤️ for Elasticsearch enthusiasts**
+**Made for Elasticsearch enthusiasts**
 
 [![GitHub](https://img.shields.io/badge/GitHub-100000?style=for-the-badge&logo=github&logoColor=white)](https://github.com/)
 [![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)](https://www.docker.com/)
