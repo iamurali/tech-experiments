@@ -1,0 +1,42 @@
+# Elasticsearch Configuration
+cluster.name: es-cluster
+network.host: 0.0.0.0
+
+# Discovery and clustering (updated for ES 9.x)
+cluster.initial_master_nodes: ["es-master-01", "es-master-02", "es-master-03"]
+discovery.seed_hosts: ["es-master-01", "es-master-02", "es-master-03"]
+
+# Gateway settings (updated for ES 9.x)
+gateway.recover_after_data_nodes: 2
+gateway.expected_data_nodes: 3
+gateway.recover_after_time: 5m
+
+# Index settings for replication
+action.auto_create_index: true
+cluster.routing.allocation.enable: all
+
+# Memory settings
+bootstrap.memory_lock: true
+
+# Monitoring and logging
+logger.level: INFO
+
+# Disable X-Pack security for simplicity (enable in production)
+xpack.security.enabled: false
+xpack.security.enrollment.enabled: false
+xpack.ml.enabled: false
+xpack.watcher.enabled: false
+
+# Threading settings
+thread_pool.write.queue_size: 10000
+thread_pool.search.queue_size: 10000
+
+# Circuit breaker settings
+indices.breaker.total.use_real_memory: false
+
+# Replication settings
+cluster.routing.rebalance.enable: all
+cluster.routing.allocation.allow_rebalance: always
+cluster.routing.allocation.cluster_concurrent_rebalance: 2
+cluster.routing.allocation.node_concurrent_recoveries: 2
+xpack.monitoring.collection.enabled: true

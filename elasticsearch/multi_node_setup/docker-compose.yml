@@ -1,0 +1,284 @@
+services:
+  es-master-01:
+    image: elasticsearch:9.1.0
+    container_name: es-master-01
+    environment:
+      - node.name=es-master-01
+      - cluster.name=es-cluster
+      - node.roles=master,ingest,data
+      - discovery.seed_hosts=es-master-02,es-master-03
+      - cluster.initial_master_nodes=es-master-01,es-master-02,es-master-03
+      - bootstrap.memory_lock=true
+      - xpack.security.enrollment.enabled=false
+      - xpack.security.enabled=false
+      - network.host=0.0.0.0
+      - http.port=9200
+      - transport.port=9300
+      - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
+    deploy:
+      resources:
+        limits:
+          memory: 2G
+        reservations:
+          memory: 1G
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - es-master-01-data:/usr/share/elasticsearch/data
+    networks:
+      - elastic-network
+    ports:
+      - "9200:9200"
+      - "9300:9300"
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:9200/_cluster/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 10
+  es-master-02:
+    image: elasticsearch:9.1.0
+    container_name: es-master-02
+    environment:
+      - node.name=es-master-02
+      - cluster.name=es-cluster
+      - node.roles=master,ingest,data
+      - discovery.seed_hosts=es-master-01,es-master-03
+      - cluster.initial_master_nodes=es-master-01,es-master-02,es-master-03
+      - bootstrap.memory_lock=true
+      - xpack.security.enrollment.enabled=false
+      - xpack.security.enabled=false
+      - network.host=0.0.0.0
+      - http.port=9200
+      - transport.port=9300
+      - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
+    deploy:
+      resources:
+        limits:
+          memory: 2G
+        reservations:
+          memory: 1G
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - es-master-02-data:/usr/share/elasticsearch/data
+    networks:
+      - elastic-network
+    ports:
+      - "9201:9200"
+      - "9301:9300"
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:9200/_cluster/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 10
+  es-master-03:
+    image: elasticsearch:9.1.0
+    container_name: es-master-03
+    environment:
+      - node.name=es-master-03
+      - cluster.name=es-cluster
+      - node.roles=master,ingest,data
+      - discovery.seed_hosts=es-master-01,es-master-02
+      - cluster.initial_master_nodes=es-master-01,es-master-02,es-master-03
+      - bootstrap.memory_lock=true
+      - xpack.security.enrollment.enabled=false
+      - xpack.security.enabled=false
+      - network.host=0.0.0.0
+      - http.port=9200
+      - transport.port=9300
+      - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
+    deploy:
+      resources:
+        limits:
+          memory: 2G
+        reservations:
+          memory: 1G
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - es-master-03-data:/usr/share/elasticsearch/data
+    networks:
+      - elastic-network
+    ports:
+      - "9202:9200"
+      - "9302:9300"
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:9200/_cluster/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 10
+  es-data-01:
+    image: elasticsearch:9.1.0
+    container_name: es-data-01
+    environment:
+      - node.name=es-data-01
+      - cluster.name=es-cluster
+      - node.roles=data,ingest
+      - discovery.seed_hosts=es-master-01,es-master-02,es-master-03
+      - cluster.initial_master_nodes=es-master-01,es-master-02,es-master-03
+      - bootstrap.memory_lock=true
+      - xpack.security.enrollment.enabled=false
+      - xpack.security.enabled=false
+      - network.host=0.0.0.0
+      - http.port=9200
+      - transport.port=9300
+      - "ES_JAVA_OPTS=-Xms1g -Xmx1g"
+    deploy:
+      resources:
+        limits:
+          memory: 2G
+        reservations:
+          memory: 1G
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - es-data-01-data:/usr/share/elasticsearch/data
+    networks:
+      - elastic-network
+    ports:
+      - "9203:9200"
+      - "9303:9300"
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:9200/_cluster/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 10
+  es-coordinator-01:
+    image: elasticsearch:9.1.0
+    container_name: es-coordinator-01
+    environment:
+      - node.name=es-coordinator-01
+      - cluster.name=es-cluster
+      - node.roles=[] # empty array means all roles are enabled
+      - discovery.seed_hosts=es-master-01,es-master-02,es-master-03
+      - cluster.initial_master_nodes=es-master-01,es-master-02,es-master-03
+      - bootstrap.memory_lock=true
+      - xpack.security.enrollment.enabled=false
+      - xpack.security.enabled=false
+      - network.host=0.0.0.0
+      - http.port=9200
+      - transport.port=9300
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+        reservations:
+          memory: 512M
+    volumes:
+      - ./elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+    networks:
+      - elastic-network
+    ports:
+      - "9204:9200"
+      - "9304:9300"
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:9200/_cluster/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+  es-coordinator-02:
+    image: elasticsearch:9.1.0
+    container_name: es-coordinator-02
+    environment:
+      - node.name=es-coordinator-02
+      - cluster.name=es-cluster
+      - node.roles=[] # empty array means all roles are enabled
+      - discovery.seed_hosts=es-master-01,es-master-02,es-master-03
+      - cluster.initial_master_nodes=es-master-01,es-master-02,es-master-03
+      - bootstrap.memory_lock=true
+      - xpack.security.enrollment.enabled=false
+      - xpack.security.enabled=false
+      - network.host=0.0.0.0
+      - http.port=9200
+      - transport.port=9300
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+        reservations:
+          memory: 512M
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - ./elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+    networks:
+      - elastic-network
+    ports:
+      - "9205:9200"
+      - "9305:9300"
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:9200/_cluster/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+  kibana_multi_node:
+    image: kibana:9.1.0
+    container_name: kibana_multi_node
+    environment:
+      - ELASTICSEARCH_HOSTS=["http://es-master-01:9200","http://es-master-02:9200","http://es-master-03:9200"]
+      - XPACK_SECURITY_ENABLED=false
+      - SERVER_NAME=kibana
+      - SERVER_HOST=0.0.0.0
+    ports:
+      - "5601:5601"
+    networks:
+      - elastic-network
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:5601/api/status || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 10
+    depends_on:
+      es-master-01:
+        condition: service_healthy
+      es-master-02:
+        condition: service_healthy
+      es-master-03:
+        condition: service_healthy
+  ha_proxy:
+    image: haproxy:latest
+    container_name: es-load-balancer
+    ports:
+      - "9999:9999"
+      - "8404:8404"
+    volumes:
+      - ./haproxy.cfg:/usr/local/etc/haproxy/haproxy.cfg
+    depends_on:
+      es-master-01:
+        condition: service_healthy
+      es-master-02:
+        condition: service_healthy
+      es-master-03:
+        condition: service_healthy
+    networks:
+      - elastic-network
+    healthcheck:
+      test: ["CMD-SHELL", "haproxy -c -f /usr/local/etc/haproxy/haproxy.cfg"]
+      interval: 30s
+      timeout: 10s
+      retries: 10
+
+volumes:
+  es-master-01-data:
+    driver: local
+  es-master-02-data:
+    driver: local
+  es-master-03-data:
+    driver: local
+  es-data-01-data:
+    driver: local
+
+networks:
+  elastic-network:
+    driver: bridge
+

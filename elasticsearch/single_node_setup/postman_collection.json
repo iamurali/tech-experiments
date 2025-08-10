@@ -1,0 +1,72 @@
+{
+	"info": {
+		"_postman_id": "4dad4d68-1786-4ff6-9bfc-cf488bdab6f5",
+		"name": "Elastic Search Demo",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json",
+		"_exporter_id": "3593243"
+	},
+	"item": [
+		{
+			"name": "Get products",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"query\": {\n        \"multi_match\": {\n            \"query\": \"skin music\",\n            \"fields\": [\n                \"title^3\", \n                \"description\",\n                \"category^2\",\n                \"tags^1.5\"  \n            ],\n            \"type\": \"cross_fields\",\n            \"operator\": \"and\"\n        }\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:9200/ecommerce_products/_search"
+			},
+			"response": []
+		},
+		{
+			"name": "Cleanup entire Data",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"query\": {\n    \"match_all\": {}\n  }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:9200/ecommerce_products/_delete_by_query"
+			},
+			"response": []
+		},
+		{
+			"name": "Faceted Search with Aggregations",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"query\": {\n        \"bool\": {\n        \"must\": [\n            {\"match\": {\"category\": \"Electronics\"}}\n        ],\n        \"filter\": [\n            {\"range\": {\"price\": {\"gte\": 50, \"lte\": 500}}},\n            {\"term\": {\"availability\": \"in_stock\"}}\n        ]\n        }\n    },\n    \"aggs\": {\n        \"brands\": {\n            \"terms\": {\"field\": \"brand\", \"size\": 10}\n        }, \n        \"price_ranges\": {\n            \"range\": {\n                \"field\": \"price\",\n                \"ranges\": [\n                    {\"to\": 100, \"key\": \"UNDER_$100\"},\n                    {\"from\": 100, \"to\": 300, \"key\": \"$100-$300\"},\n                    {\"from\": 300, \"key\": \"ABOVE_$300\"}\n                ]\n            }\n        },\n        \"rating_stats\": {\n            \"stats\": {\"field\": \"rating\"}\n        }\n    }\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": "http://localhost:9200/ecommerce_products/_search"
+			},
+			"response": []
+		},
+		{
+			"name": "Auto complete",
+			"request": {
+				"method": "GET",
+				"header": []
+			},
+			"response": []
+		}
+	]
+}

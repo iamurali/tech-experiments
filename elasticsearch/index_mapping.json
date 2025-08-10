@@ -1,0 +1,83 @@
+{
+  "settings": {
+    "number_of_shards": 1,
+    "number_of_replicas": 0,
+    "analysis": {
+      "analyzer": {
+        "autocomplete": {
+          "tokenizer": "autocomplete",
+          "filter": ["lowercase"]
+        },
+        "autocomplete_search": {
+          "tokenizer": "lowercase"
+        }
+      },
+      "tokenizer": {
+        "autocomplete": {
+          "type": "edge_ngram",
+          "min_gram": 3,
+          "max_gram": 10,
+          "token_chars": ["letter", "digit"]
+        }
+      }
+    }
+  },
+  "mappings": {
+    "properties": {
+      "product_id": {"type":  "keyword"},
+      "title": {
+        "type": "text",
+        "analyzer": "standard",
+        "fields": {
+          "autocomplete": {
+            "type": "text",
+            "analyzer": "autocomplete",
+            "search_analyzer": "autocomplete_search"
+          },
+          "keyword": {"type": "keyword"}
+        }
+      },
+      "description": {"type": "text", "analyzer": "standard"},
+      "category": {
+        "type": "text",
+        "fields": {
+          "keyword": {"type": "keyword"}
+        }
+      },
+      "brand": {"type":  "keyword"},
+      "price": {"type":  "float"},
+      "original_price": {"type":  "float"},
+      "discount_percentage": {"type": "float"},
+      "rating": {"type": "float"},
+      "review_count": {"type": "integer"},
+      "availability": {"type": "keyword"},
+      "stock_quantity": {"type": "integer"},
+      "tags": {"type": "keyword"},
+      "attributes": {
+        "type": "object",
+        "properties": {
+          "name": {"type": "keyword"},
+          "value": {"type": "keyword"}
+        }
+      },
+      "location": {
+        "type": "object",
+        "properties": {
+          "warehouse": {"type": "keyword"},
+          "coordinates": {"type": "geo_point"}
+        }
+      },
+      "created_date": {"type": "date"},
+      "last_updated": {"type": "date"},
+      "images": {"type": "keyword"},
+      "vendor": {
+        "type": "object",
+        "properties": {
+          "id": {"type": "keyword"},
+          "name": {"type": "keyword"},
+          "rating": {"type": "float"}
+        }
+      }
+    }
+  }
+}

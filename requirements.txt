@@ -1,0 +1,5 @@
+elasticsearch==9.1.0
+faker==20.1.0
+faker_commerce
+pandas
+kaggle
